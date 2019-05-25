@@ -11,7 +11,6 @@
     <li>ML Pipeline</li>
     <li>Web Application</li>
 </ol>
-
 4. Inference
 5. Analysis Results, Caveat and Improvement Suggestions
 6. Acknowledgments 
