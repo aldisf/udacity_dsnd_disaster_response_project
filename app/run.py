@@ -1,9 +1,10 @@
 import json
+import sys
+sys.path.append('../models/')
+
 import plotly
 import pandas as pd
-
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize
+import numpy as np
 
 from flask import Flask
 from flask import render_template, request, jsonify
@@ -11,26 +12,18 @@ from plotly.graph_objs import Bar
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
+from disaster_response_utils import tokenize
 
 app = Flask(__name__)
 
-def tokenize(text):
-    tokens = word_tokenize(text)
-    lemmatizer = WordNetLemmatizer()
 
-    clean_tokens = []
-    for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-        clean_tokens.append(clean_tok)
-
-    return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
+df = pd.read_sql_table('messages', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -42,6 +35,12 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    # Get the Category Counts in the news data
+
+    topic_counts = df[df.columns[4:]].sum().values
+    topics = df.columns[4:]
+    sorted_inds = topic_counts.argsort()
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -61,6 +60,26 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+    # Visualize the Distribution of Topic/Category Counts in the News Data
+        {
+            'data': [
+                Bar(
+                    x=topics[np.flip(sorted_inds)],
+                    y=topic_counts[np.flip(sorted_inds)]
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Categories",
+                    'tickangle': -90
                 }
             }
         }
