@@ -33,8 +33,6 @@ This project is submitted as a requisite of completing Udacity's Data Scientist 
 
 2. Online text classification - the classifier will also be deployed as a web application to enable user to input a text and get the corresponding labels out immediately. 
 
-#### An example of this classifier running is hosted at: 
-
 
 
 
