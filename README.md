@@ -6,11 +6,9 @@
 1. Introduction
 2. Dependencies 
 3. How to Run The Application
-<ol>
-    <li>ETL</li>
-    <li>ML Pipeline</li>
-    <li>Web Application</li>
-</ol>
+    a.ETL
+    b.ML Pipeline
+    c.Web Application
 4. Inference
 5. Analysis Results, Caveat and Improvement Suggestions
 6. Acknowledgments 
